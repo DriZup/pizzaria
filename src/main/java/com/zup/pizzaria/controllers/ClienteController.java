@@ -21,10 +21,10 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @PostMapping
-    public ResponseEntity<Cliente> criarCliente(@Valid @RequestBody ClienteDTO clienteDTO) {
+    @PostMapping("/novo")
+    public ResponseEntity<ClienteDTO> criarCliente(@Valid @RequestBody ClienteDTO clienteDTO) {
         Cliente clienteCriado = clienteService.criarCliente(clienteDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteCriado);
+        ClienteDTO responseDTO = new ClienteDTO(clienteCriado.getNome(), clienteCriado.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }
