@@ -16,6 +16,8 @@ public class Pedido {
     @NotNull(message = "O ID do cliente não pode ser nulo.")
     private Long clienteId;
 
+    public Pedido() {
+    }
 
     public Pedido(Long clienteId, String descricao) {
         this.clienteId = clienteId;

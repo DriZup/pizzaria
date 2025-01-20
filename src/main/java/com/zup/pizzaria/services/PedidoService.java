@@ -7,6 +7,9 @@ import com.zup.pizzaria.repository.ClienteRepository;
 import com.zup.pizzaria.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PedidoService {
     private final PedidoRepository pedidoRepository;
@@ -18,14 +21,23 @@ public class PedidoService {
     }
 
     public PedidoDTO criarPedido(Pedido pedido) {
-        // Salva pedido
         pedidoRepository.save(pedido);
 
-        // Obtenho cliente
         Cliente cliente = clienteRepository
                 .findById(pedido.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         return new PedidoDTO(cliente.getNome(), cliente.getEmail(), pedido.getDescricao());
     }
+
+    public List<PedidoDTO> listarPedidos() {
+        return pedidoRepository.findAll().stream().map(pedido -> {
+            Cliente cliente = clienteRepository
+                    .findById(pedido.getClienteId())
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+            return new PedidoDTO(cliente.getNome(), cliente.getEmail(), pedido.getDescricao());
+        }).collect(Collectors.toList());
+    }
 }
+

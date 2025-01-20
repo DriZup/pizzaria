@@ -11,6 +11,10 @@ public class PedidoDTO {
         this.descricaoPedido = descricaoPedido;
     }
 
+    public PedidoDTO() {
+
+    }
+
     public String getNomeCliente() {
         return nomeCliente;
     }
