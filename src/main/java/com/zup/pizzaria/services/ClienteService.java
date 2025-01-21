@@ -5,6 +5,8 @@ import com.zup.pizzaria.models.Cliente;
 import com.zup.pizzaria.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClienteService {
 
@@ -20,5 +22,15 @@ public class ClienteService {
                 clienteDTO.getEmail()
         );
        return clienteRepository.save(cliente);
+    }
+
+    public Cliente buscarClientePorId(Long id) {
+        return clienteRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente nao encontrado"));
+    }
+
+    public List<Cliente> listarClientes() {
+        return clienteRepository.findAll();
     }
 }
