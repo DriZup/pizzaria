@@ -13,14 +13,15 @@ public class Pedido {
     @NotNull(message = "A descrição não pode ser nula.")
     private String descricao;
 
-    @NotNull(message = "O ID do cliente não pode ser nulo.")
-    private Long clienteId;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
     public Pedido() {
     }
 
-    public Pedido(Long clienteId, String descricao) {
-        this.clienteId = clienteId;
+    public Pedido(Cliente cliente, String descricao) {
+        this.cliente = cliente;
         this.descricao = descricao;
     }
 
@@ -40,11 +41,15 @@ public class Pedido {
         this.descricao = descricao;
     }
 
-    public Long getClienteId() {
-        return clienteId;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Long getClienteId() {
+        return cliente.getId();
     }
 }
