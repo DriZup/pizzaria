@@ -10,12 +10,14 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY) // Ou EAGER, dependendo do caso
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
     @NotNull(message = "A descrição não pode ser nula.")
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+
 
     public Pedido() {
     }

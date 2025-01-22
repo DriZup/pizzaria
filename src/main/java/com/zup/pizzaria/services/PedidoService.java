@@ -1,8 +1,10 @@
 package com.zup.pizzaria.services;
 
 import com.zup.pizzaria.dtos.PedidoDTO;
+import com.zup.pizzaria.exceptions.ClienteInvalidoException;
+import com.zup.pizzaria.exceptions.PedidoNotFoundException;
+import com.zup.pizzaria.models.Cliente;
 import com.zup.pizzaria.models.Pedido;
-
 import com.zup.pizzaria.repository.ClienteRepository;
 import com.zup.pizzaria.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ public class PedidoService {
         this.clienteRepository = clienteRepository;
     }
 
-
     public List<PedidoDTO> listarPedidos() {
         return pedidoRepository.findAll().stream()
                 .map(PedidoDTO::new)
@@ -39,11 +40,18 @@ public class PedidoService {
     }
 
     public void deletarPedido(Long id) {
+        if (!pedidoRepository.existsById(id)) {
+            throw new PedidoNotFoundException("Pedido não encontrado com o ID: " + id);
+        }
         pedidoRepository.deleteById(id);
     }
 
     public PedidoDTO criarPedido(Pedido pedido) {
-        pedidoRepository.save(pedido);
-        return new PedidoDTO(pedido);
+        Cliente cliente = clienteRepository.findById(pedido.getCliente().getId())
+                .orElseThrow(() -> new ClienteInvalidoException("Cliente não encontrado com o ID: " + pedido.getCliente().getId()));
+        pedido.setCliente(cliente);
+
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        return new PedidoDTO(pedidoSalvo);
     }
 }

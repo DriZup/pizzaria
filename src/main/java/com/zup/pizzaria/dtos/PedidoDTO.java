@@ -7,24 +7,22 @@ public class PedidoDTO {
     private String emailCliente;
     private String descricaoPedido;
 
+
+
+    public PedidoDTO() {
+
+    }
+
     public PedidoDTO(String nomeCliente, String emailCliente, String descricaoPedido) {
         this.nomeCliente = nomeCliente;
         this.emailCliente = emailCliente;
         this.descricaoPedido = descricaoPedido;
     }
 
-    public PedidoDTO() {
-
-    }
-
-    public PedidoDTO(String descricao) {
-        this.descricaoPedido = descricao;
-    }
-
-    public PedidoDTO(Pedido pedido) {
-        this.nomeCliente = pedido.getCliente().getNome();
-        this.emailCliente = pedido.getCliente().getEmail();
-        this.descricaoPedido = pedido.getDescricao();
+    public PedidoDTO(Pedido pedidoSalvo) {
+        this.nomeCliente = pedidoSalvo.getCliente().getNome();
+        this.emailCliente = pedidoSalvo.getCliente().getEmail();
+        this.descricaoPedido = pedidoSalvo.getDescricao();
     }
 
 

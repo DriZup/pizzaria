@@ -4,6 +4,7 @@ import com.zup.pizzaria.dtos.PedidoDTO;
 import com.zup.pizzaria.models.Pedido;
 import com.zup.pizzaria.services.PedidoService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,9 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDTO> criarPedido(@RequestBody @Valid Pedido pedido) {
-        PedidoDTO pedidoDTO = pedidoService.criarPedido(pedido);
-        return ResponseEntity.ok(pedidoDTO);
+    public ResponseEntity<PedidoDTO> criarPedido(@RequestBody Pedido pedido) {
+        PedidoDTO pedidoCriado = pedidoService.criarPedido(pedido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoCriado);
     }
 
     @GetMapping
