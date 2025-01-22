@@ -1,8 +1,8 @@
 package com.zup.pizzaria.services;
 
 import com.zup.pizzaria.dtos.PedidoDTO;
-import com.zup.pizzaria.models.Cliente;
 import com.zup.pizzaria.models.Pedido;
+
 import com.zup.pizzaria.repository.ClienteRepository;
 import com.zup.pizzaria.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
+
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
 
@@ -20,24 +21,29 @@ public class PedidoService {
         this.clienteRepository = clienteRepository;
     }
 
-    public PedidoDTO criarPedido(Pedido pedido) {
-        pedidoRepository.save(pedido);
-
-        Cliente cliente = clienteRepository
-                .findById(pedido.getClienteId())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-
-        return new PedidoDTO(cliente.getNome(), cliente.getEmail(), pedido.getDescricao());
-    }
 
     public List<PedidoDTO> listarPedidos() {
-        return pedidoRepository.findAll().stream().map(pedido -> {
-            Cliente cliente = clienteRepository
-                    .findById(pedido.getClienteId())
-                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        return pedidoRepository.findAll().stream()
+                .map(PedidoDTO::new)
+                .collect(Collectors.toList());
+    }
 
-            return new PedidoDTO(cliente.getNome(), cliente.getEmail(), pedido.getDescricao());
-        }).collect(Collectors.toList());
+    public PedidoDTO atualizarPedido(Long id, Pedido pedidoAtualizado) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setDescricao(pedidoAtualizado.getDescricao());
+
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        return new PedidoDTO(pedidoSalvo);
+    }
+
+    public void deletarPedido(Long id) {
+        pedidoRepository.deleteById(id);
+    }
+
+    public PedidoDTO criarPedido(Pedido pedido) {
+        pedidoRepository.save(pedido);
+        return new PedidoDTO(pedido);
     }
 }
-
