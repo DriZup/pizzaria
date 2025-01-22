@@ -1,5 +1,7 @@
 package com.zup.pizzaria.dtos;
 
+import com.zup.pizzaria.models.Pedido;
+
 public class PedidoDTO {
     private String nomeCliente;
     private String emailCliente;
@@ -14,6 +16,17 @@ public class PedidoDTO {
     public PedidoDTO() {
 
     }
+
+    public PedidoDTO(String descricao) {
+        this.descricaoPedido = descricao;
+    }
+
+    public PedidoDTO(Pedido pedido) {
+        this.nomeCliente = pedido.getCliente().getNome();
+        this.emailCliente = pedido.getCliente().getEmail();
+        this.descricaoPedido = pedido.getDescricao();
+    }
+
 
     public String getNomeCliente() {
         return nomeCliente;
