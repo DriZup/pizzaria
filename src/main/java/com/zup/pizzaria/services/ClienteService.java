@@ -3,6 +3,7 @@ package com.zup.pizzaria.services;
 import com.zup.pizzaria.dtos.ClienteDTO;
 import com.zup.pizzaria.models.Cliente;
 import com.zup.pizzaria.repository.ClienteRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,10 +31,10 @@ public class ClienteService {
         return clienteRepository.findById(id);
     }
 
-    public Optional<Cliente> atualizarCliente(Long id, Cliente clienteAtualizado) {
+    public Optional<Cliente> atualizarCliente(Long id, @Valid Cliente clienteDTO) {
         return clienteRepository.findById(id).map(cliente -> {
-            cliente.setNome(clienteAtualizado.getNome());
-            cliente.setEmail(clienteAtualizado.getEmail());
+            cliente.setNome(clienteDTO.getNome());
+            cliente.setEmail(clienteDTO.getEmail());
             return clienteRepository.save(cliente);
         });
     }
@@ -45,5 +46,4 @@ public class ClienteService {
         }
         return false;
     }
-
 }
