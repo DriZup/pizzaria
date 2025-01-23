@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
+
     private final PedidoService pedidoService;
 
     public PedidoController(PedidoService pedidoService) {
@@ -20,7 +21,7 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDTO> criarPedido(@RequestBody Pedido pedido) {
+    public ResponseEntity<PedidoDTO> criarPedido(@RequestBody @Valid Pedido pedido) {
         PedidoDTO pedidoCriado = pedidoService.criarPedido(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoCriado);
     }
@@ -31,15 +32,15 @@ public class PedidoController {
         return ResponseEntity.ok(pedidosDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPedido(@PathVariable Long id) {
-        pedidoService.deletarPedido(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> atualizarPedido(@PathVariable Long id, @RequestBody @Valid Pedido pedido) {
         PedidoDTO pedidoAtualizado = pedidoService.atualizarPedido(id, pedido);
         return ResponseEntity.ok(pedidoAtualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPedido(@PathVariable Long id) {
+        pedidoService.deletarPedido(id);
+        return ResponseEntity.noContent().build();
     }
 }
