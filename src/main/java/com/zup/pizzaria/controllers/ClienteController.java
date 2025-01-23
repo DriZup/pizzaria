@@ -21,7 +21,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @PostMapping("/novo")
+    @PostMapping
     public ResponseEntity<ClienteDTO> criarCliente(@Valid @RequestBody ClienteDTO clienteDTO) {
         Cliente clienteCriado = clienteService.criarCliente(clienteDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -44,7 +44,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
+    public ResponseEntity<ClienteDTO> atualizarCliente(@PathVariable Long id, @Valid @RequestBody Cliente clienteAtualizado) {
         return clienteService.atualizarCliente(id, clienteAtualizado)
                 .map(cliente -> ResponseEntity.ok(new ClienteDTO(cliente.getNome(), cliente.getEmail())))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
