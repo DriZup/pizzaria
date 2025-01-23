@@ -1,46 +1,44 @@
 package com.zup.pizzaria.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "pagamentos")
 public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "O ID do pedido é obrigatório.")
     private Long pedidoId;
 
-    @NotBlank
+    @NotNull(message = "A forma de pagamento é obrigatória.")
     private String formaPagamento;
 
-    @NotNull
-    @DecimalMin(value = "0.0", inclusive = false, message = "O valor pago deve ser maior que zero.")
+    private String descricao;
+
+    @NotNull(message = "O valor pago é obrigatório.")
     private BigDecimal valorPago;
 
-    @NotNull
+    @NotNull(message = "A data e hora do pagamento são obrigatórias.")
     private LocalDateTime dataHoraPagamento;
 
     public Pagamento() {}
 
-    public Pagamento(Long id, Long pedidoId, String formaPagamento, BigDecimal valorPago, LocalDateTime dataHoraPagamento) {
-        this.id = id;
+    public Pagamento(Long pedidoId, String formaPagamento, String descricao, BigDecimal valorPago, LocalDateTime dataHoraPagamento) {
         this.pedidoId = pedidoId;
         this.formaPagamento = formaPagamento;
+        this.descricao = descricao;
         this.valorPago = valorPago;
         this.dataHoraPagamento = dataHoraPagamento;
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -65,6 +63,14 @@ public class Pagamento {
         this.formaPagamento = formaPagamento;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public BigDecimal getValorPago() {
         return valorPago;
     }
@@ -79,11 +85,5 @@ public class Pagamento {
 
     public void setDataHoraPagamento(LocalDateTime dataHoraPagamento) {
         this.dataHoraPagamento = dataHoraPagamento;
-    }
-
-    public void validarPagamentos() {
-        if (valorPago.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("O valor pago deve ser maior que zero.");
-        }
     }
 }
