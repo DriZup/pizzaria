@@ -31,7 +31,7 @@ public class PedidoService {
 
     public PedidoDTO atualizarPedido(Long id, Pedido pedidoAtualizado) {
         Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new PedidoNotFoundException("Pedido não encontrado com o ID: " + id));
 
         pedido.setDescricao(pedidoAtualizado.getDescricao());
 
