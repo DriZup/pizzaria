@@ -1,23 +1,30 @@
 package com.zup.pizzaria.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "pedidos")
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descricao;
-    private Long clienteId;
 
-    public Pedido(Long clienteId, String descricao) {
-        this.clienteId = clienteId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false) // Relacionamento com Cliente
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    @NotNull(message = "A descrição do pedido é obrigatória.")
+    private String descricao;
+
+    public Pedido() {}
+
+    public Pedido(Cliente cliente, String descricao) {
+        this.cliente = cliente;
         this.descricao = descricao;
     }
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -26,19 +33,19 @@ public class Pedido {
         this.id = id;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public String getDescricao() {
         return descricao;
     }
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
     }
 }
