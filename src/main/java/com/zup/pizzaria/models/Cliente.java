@@ -1,6 +1,7 @@
 package com.zup.pizzaria.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -10,16 +11,22 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "O nome do cliente é obrigatório.")
+    @NotNull(message = "O nome do cliente é obrigatório.")
     private String nome;
 
-    @NotNull
+    @NotNull(message = "O email do cliente é obrigatório.")
+    @Email(message = "O email deve ser válido.")
     private String email;
 
     public Cliente() {}
 
     public Cliente(Long id, String nome, String email) {
         this.id = id;
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public Cliente(String nome, String email) {
         this.nome = nome;
         this.email = email;
     }
@@ -45,11 +52,6 @@ public class Cliente {
     }
 
     public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Cliente(String nome, String email) {
-        this.nome = nome;
         this.email = email;
     }
 }
